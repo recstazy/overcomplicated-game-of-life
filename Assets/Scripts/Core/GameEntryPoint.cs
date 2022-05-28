@@ -29,6 +29,8 @@ namespace GameOfLife.Core
             this.config = config;
             this.implementationFactory = implementationFactory;
             this.input = input;
+
+            input.OnReset += ResetGame;
         }
 
         private void Start()
@@ -48,6 +50,16 @@ namespace GameOfLife.Core
         private void OnDestroy()
         {
             implementation?.Dispose();
+
+            if (input != null)
+            {
+                input.OnReset -= ResetGame;
+            }
+        }
+
+        private void ResetGame()
+        {
+            implementation?.Reset(aliveOnStartPositions);
         }
 
         private async void StartUpdateLoop()

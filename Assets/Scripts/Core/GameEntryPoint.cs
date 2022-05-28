@@ -1,14 +1,12 @@
 using UnityEngine;
 using System.Threading.Tasks;
 using GameOfLife.Abstraction;
+using Zenject;
 
 namespace GameOfLife.Core
 {
     public class GameEntryPoint : MonoBehaviour
     {
-        [SerializeField]
-        private GameImplementationType implementationType;
-
         [SerializeField]
         [Min(0)]
         private int updateLoopDelay;
@@ -17,17 +15,22 @@ namespace GameOfLife.Core
         private bool isPaused;
 
         [SerializeField]
-        private GameConfiguration config;
-
-        [SerializeField]
         private Vector2Int[] aliveOnStartIndices;
 
+        private IGameConfguration config;
+        private IGameImplementationFactory implementationFactory;
         private IGameImplementation implementation;
-        
-        private void Awake()
+
+        [Inject]
+        public void Construct(IGameConfguration config, IGameImplementationFactory implementationFactory)
         {
-            var implementationFactory = new GameImplementationFactory();
-            implementation = implementationFactory.CreateImplementation(implementationType);
+            this.config = config;
+            this.implementationFactory = implementationFactory;
+        }
+
+        private void Start()
+        {
+            implementation = implementationFactory.Create(config.Implementation);
             implementation.Configuration = config;
             implementation.Initialize(aliveOnStartIndices);
             StartUpdateLoop();

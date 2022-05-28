@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.svermeulen.extenject": "https://github.com/Mathijs-Bakker/Extenject.git?path=UnityProject/Assets/Plugins/Zenject/Source#9.3.0",
     "com.unity.cinemachine": "2.6.11",
     "com.unity.collab-proxy": "1.15.16",
     "com.unity.entities": "0.17.0-preview.42",

@@ -23,11 +23,12 @@ namespace GameOfLife.Core
 
         [Inject]
         public void Construct(IGameConfguration config, IGameImplementationFactory implementationFactory,
-            IGameOfLifeInput input)
+            IGameOfLifeInput input, IFactory<GameImplementationType, ICellSelector> cellSelectorFactory)
         {
             this.config = config;
             this.implementationFactory = implementationFactory;
             this.input = input;
+            cellSelectorFactory.Create(config.Implementation);
 
             input.OnReset += ResetGame;
             input.OnPlayOrPause += PlayPause;

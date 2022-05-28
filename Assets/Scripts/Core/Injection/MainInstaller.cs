@@ -14,6 +14,7 @@ namespace GameOfLife.Core.Injection
         public override void InstallBindings()
         {
             Container.BindInterfacesTo<GameImplementationFactory>().AsTransient();
+            Container.BindInterfacesTo<CellSelectorFactory>().AsTransient();
             Container.BindInterfacesTo<GameOfLifeInput>().AsSingle();
             Container.Bind<IGameConfguration>().FromInstance(configuration).AsSingle();
         }

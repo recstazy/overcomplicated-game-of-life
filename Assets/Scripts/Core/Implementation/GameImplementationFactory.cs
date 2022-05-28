@@ -7,7 +7,7 @@ namespace GameOfLife.Core
 {
     public class GameImplementationFactory : IGameImplementationFactory
     {
-        private DiContainer container;
+        private readonly DiContainer container;
 
         public GameImplementationFactory(DiContainer container)
         {

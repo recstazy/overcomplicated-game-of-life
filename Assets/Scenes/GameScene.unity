@@ -152,6 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 385312c74166ea2449734f461e13f11d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  implementationType: 0
+  config:
+    gridSize: 64
+    cellMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+    cellMaterial: {fileID: 2100000, guid: 0b1f585caa72cfd42a5b5107851358c1, type: 2}
+    aliveColor: {r: 1, g: 1, b: 1, a: 1}
+    deadColor: {r: 0, g: 0, b: 0, a: 1}
   updateLoopDelay: 40
   gridSize: 64
   isPaused: 0
@@ -160,16 +167,11 @@ MonoBehaviour:
   aliveColor: {r: 1, g: 1, b: 1, a: 1}
   deadColor: {r: 0, g: 0, b: 0, a: 1}
   aliveOnStartIndices:
-  - x: 5
-    y: 5
-  - x: 5
-    y: 6
-  - x: 5
-    y: 7
-  - x: 4
-    y: 7
-  - x: 3
-    y: 6
+  - {x: 5, y: 5}
+  - {x: 5, y: 6}
+  - {x: 5, y: 7}
+  - {x: 4, y: 7}
+  - {x: 3, y: 6}
 --- !u!4 &253556224
 Transform:
   m_ObjectHideFlags: 0

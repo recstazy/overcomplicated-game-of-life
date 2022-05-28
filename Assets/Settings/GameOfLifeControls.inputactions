@@ -1,0 +1,54 @@
+{
+    "name": "GameOfLifeControls",
+    "maps": [
+        {
+            "name": "GameOfLifeGame",
+            "id": "897bce75-4fe5-48d8-a7ae-e449f9577425",
+            "actions": [
+                {
+                    "name": "HoldPointer",
+                    "type": "Button",
+                    "id": "599608e8-760e-45e2-a9f1-1de98ce9db53",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(pressPoint=0.5)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PointerPosition",
+                    "type": "Value",
+                    "id": "eb0105bb-6e50-4bfc-aaa2-66d1e75a5a3f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "01137a14-ac3b-48b4-be7e-77b1e8ad05d0",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldPointer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1091f3bb-bece-4413-9a03-f868b481ce95",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PointerPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

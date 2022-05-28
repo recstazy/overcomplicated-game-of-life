@@ -19,13 +19,16 @@ namespace GameOfLife.Core
 
         private IGameConfguration config;
         private IGameImplementationFactory implementationFactory;
+        private IGameOfLifeInput input;
         private IGameImplementation implementation;
 
         [Inject]
-        public void Construct(IGameConfguration config, IGameImplementationFactory implementationFactory)
+        public void Construct(IGameConfguration config, IGameImplementationFactory implementationFactory,
+            IGameOfLifeInput input)
         {
             this.config = config;
             this.implementationFactory = implementationFactory;
+            this.input = input;
         }
 
         private void Start()
@@ -34,6 +37,16 @@ namespace GameOfLife.Core
             implementation.Configuration = config;
             implementation.Initialize(aliveOnStartIndices);
             StartUpdateLoop();
+        }
+
+        private void Update()
+        {
+            input?.Update();
+        }
+
+        private void OnDestroy()
+        {
+            implementation?.Dispose();
         }
 
         private async void StartUpdateLoop()

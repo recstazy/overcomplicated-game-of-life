@@ -6,6 +6,8 @@ using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
+using Zenject;
+using UnityEngine.InputSystem;
 
 namespace GameOfLife.Core.Ecs
 {
@@ -13,6 +15,15 @@ namespace GameOfLife.Core.Ecs
     {
         public IGameConfguration Configuration { get; set; }
         private IsAliveSystem isAliveSystem;
+        private IGameOfLifeInput input;
+
+        [Inject]
+        public void Construct(IGameOfLifeInput input)
+        {
+            this.input = input;
+            input.OnPointerHoldChanged += PointerHoldChanged;
+            input.OnPointerDrag += PointerDrag;
+        }
 
         public void Initialize(Vector2Int[] aliveOnStart)
         {
@@ -54,8 +65,26 @@ namespace GameOfLife.Core.Ecs
             }
         }
 
-        public void ScheduleUpdate() 
-            => isAliveSystem.ScheduleUpdate();
+        public void ScheduleUpdate() => isAliveSystem.ScheduleUpdate();
+
+        public void Dispose()
+        {
+            if (input != null)
+            {
+                input.OnPointerHoldChanged -= PointerHoldChanged;
+                input.OnPointerDrag -= PointerDrag;
+            }
+        }
+
+        private void PointerHoldChanged(bool isDown)
+        {
+            Debug.Log(isDown);
+        }
+
+        private void PointerDrag(Vector2Int newPosition)
+        {
+            Debug.Log(newPosition);
+        }
 
         private float4 ToFloat4(Color color) 
             => new float4(color.r, color.g, color.b, color.a);

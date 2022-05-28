@@ -1,6 +1,7 @@
 using GameOfLife.Abstraction;
 using UnityEngine;
 using Zenject;
+using GameOfLife.Input;
 
 namespace GameOfLife.Core.Injection
 {
@@ -12,7 +13,8 @@ namespace GameOfLife.Core.Injection
 
         public override void InstallBindings()
         {
-            Container.Bind<IGameImplementationFactory>().To<GameImplementationFactory>().AsTransient();
+            Container.BindInterfacesTo<GameImplementationFactory>().AsTransient();
+            Container.BindInterfacesTo<GameOfLifeInput>().AsSingle();
             Container.Bind<IGameConfguration>().FromInstance(configuration).AsSingle();
         }
     }

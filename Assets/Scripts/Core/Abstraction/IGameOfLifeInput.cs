@@ -12,5 +12,6 @@ namespace GameOfLife.Abstraction
         event Action OnReset;
         Vector2Int CurrentPointerPosition { get; }
         void Update();
+        void SetMouseInputActive(bool isActive);
     }
 }

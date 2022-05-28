@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using GameOfLife.Abstraction;
 using Zenject;
+using System;
 
 namespace GameOfLife.Core
 {
@@ -12,15 +13,13 @@ namespace GameOfLife.Core
         private int updateLoopDelay;
 
         [SerializeField]
-        private bool isPaused;
-
-        [SerializeField]
         private Vector2Int[] aliveOnStartPositions;
 
         private IGameConfguration config;
         private IGameImplementationFactory implementationFactory;
         private IGameOfLifeInput input;
         private IGameImplementation implementation;
+        private bool isPaused = true;
 
         [Inject]
         public void Construct(IGameConfguration config, IGameImplementationFactory implementationFactory,
@@ -31,6 +30,7 @@ namespace GameOfLife.Core
             this.input = input;
 
             input.OnReset += ResetGame;
+            input.OnPlayOrPause += PlayPause;
         }
 
         private void Start()
@@ -54,12 +54,25 @@ namespace GameOfLife.Core
             if (input != null)
             {
                 input.OnReset -= ResetGame;
+                input.OnPlayOrPause -= PlayPause;
             }
+        }
+
+        private void PlayPause()
+        {
+            SetPaused(!isPaused);
         }
 
         private void ResetGame()
         {
+            SetPaused(true);
             implementation?.Reset(aliveOnStartPositions);
+        }
+
+        private void SetPaused(bool isPaused)
+        {
+            this.isPaused = isPaused;
+            input.SetMouseInputActive(isPaused);
         }
 
         private async void StartUpdateLoop()

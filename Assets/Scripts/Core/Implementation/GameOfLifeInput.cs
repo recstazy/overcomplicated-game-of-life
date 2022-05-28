@@ -49,6 +49,14 @@ namespace GameOfLife.Input
             }
         }
 
+        public void SetMouseInputActive(bool isActive)
+        {
+            if (isActive)
+                controls.GameOfLifeGame.HoldPointer.Enable();
+            else
+                controls.GameOfLifeGame.HoldPointer.Disable();
+        }
+
         private void ResetPerformed(InputAction.CallbackContext context)
         {
             if (context.performed)

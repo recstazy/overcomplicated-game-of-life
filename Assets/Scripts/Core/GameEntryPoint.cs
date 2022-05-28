@@ -15,7 +15,7 @@ namespace GameOfLife.Core
         private bool isPaused;
 
         [SerializeField]
-        private Vector2Int[] aliveOnStartIndices;
+        private Vector2Int[] aliveOnStartPositions;
 
         private IGameConfguration config;
         private IGameImplementationFactory implementationFactory;
@@ -35,7 +35,8 @@ namespace GameOfLife.Core
         {
             implementation = implementationFactory.Create(config.Implementation);
             implementation.Configuration = config;
-            implementation.Initialize(aliveOnStartIndices);
+            implementation.Initialize();
+            implementation.Reset(aliveOnStartPositions);
             StartUpdateLoop();
         }
 

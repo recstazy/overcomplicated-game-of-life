@@ -2,10 +2,12 @@ using System;
 using Unity.Collections;
 using Unity.Mathematics;
 
-namespace GameOfLife.Core.Models
+namespace GameOfLife.Core
 {
     public struct NativeGrid<T> : IDisposable where T : struct
     {
+        public bool IsCreated => array.IsCreated;
+
         private NativeArray<T> array;
         private readonly int gridSize;
 
@@ -33,6 +35,21 @@ namespace GameOfLife.Core.Models
         {
             get => GetElement(position.x, position.y);
             set => SetElement(position.x, position.y, value);
+        }
+
+        public void CostructFromArray(T[] array)
+        {
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    var arrayIndex = x + y;
+                    if (arrayIndex >= array.Length)
+                        return;
+
+                    SetElement(x, y, in array[x + y]);
+                }
+            }
         }
 
         private T GetElement(int x, int y)

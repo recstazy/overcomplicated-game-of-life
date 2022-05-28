@@ -2,7 +2,6 @@ using GameOfLife.Core.Ecs;
 using Unity.Collections;
 using Unity.Mathematics;
 using System;
-using GameOfLife.Core.Models;
 
 namespace GameOfLife.Core
 {
@@ -12,17 +11,29 @@ namespace GameOfLife.Core
         private NativeGrid<bool> isAliveNextIterationBuffer;
         private readonly int gridSize;
 
-        public AliveProcessor(int gridSize)
+        public AliveProcessor(int gridSize, bool allocNextIteration = true)
         {
             this.gridSize = gridSize;
             isAliveNowBuffer = new NativeGrid<bool>(gridSize, Allocator.TempJob);
-            isAliveNextIterationBuffer = new NativeGrid<bool>(gridSize, Allocator.TempJob);
+
+            if (allocNextIteration)
+                isAliveNextIterationBuffer = new NativeGrid<bool>(gridSize, Allocator.TempJob);
+            else
+                isAliveNextIterationBuffer = default;
         }
 
         public void Dispose()
         {
             isAliveNowBuffer.Dispose();
             isAliveNextIterationBuffer.Dispose();
+        }
+
+        public void OverrideNextIterationAliveBuffer(NativeGrid<bool> newAliveBuffer)
+        {
+            if (isAliveNextIterationBuffer.IsCreated)
+                isAliveNextIterationBuffer.Dispose();
+
+            isAliveNextIterationBuffer = newAliveBuffer;
         }
 
         public void FetchIsAliveNow(in Cell cell)

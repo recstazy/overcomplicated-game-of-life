@@ -46,6 +46,24 @@ namespace GameOfLife.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PlayPauseSimulation"",
+                    ""type"": ""Button"",
+                    ""id"": ""24ea354d-ae30-4baf-aea8-d340f7082d3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ResetSimulation"",
+                    ""type"": ""Button"",
+                    ""id"": ""d2b5c328-f1a5-46fe-9015-75a848ca3afc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -70,6 +88,28 @@ namespace GameOfLife.Input
                     ""action"": ""PointerPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b8b6165-5d1d-49f9-8d84-23a7833ec5bc"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlayPauseSimulation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66310a98-9ee1-4714-baaa-b7808feab1d7"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetSimulation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -80,6 +120,8 @@ namespace GameOfLife.Input
             m_GameOfLifeGame = asset.FindActionMap("GameOfLifeGame", throwIfNotFound: true);
             m_GameOfLifeGame_HoldPointer = m_GameOfLifeGame.FindAction("HoldPointer", throwIfNotFound: true);
             m_GameOfLifeGame_PointerPosition = m_GameOfLifeGame.FindAction("PointerPosition", throwIfNotFound: true);
+            m_GameOfLifeGame_PlayPauseSimulation = m_GameOfLifeGame.FindAction("PlayPauseSimulation", throwIfNotFound: true);
+            m_GameOfLifeGame_ResetSimulation = m_GameOfLifeGame.FindAction("ResetSimulation", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -141,12 +183,16 @@ namespace GameOfLife.Input
         private IGameOfLifeGameActions m_GameOfLifeGameActionsCallbackInterface;
         private readonly InputAction m_GameOfLifeGame_HoldPointer;
         private readonly InputAction m_GameOfLifeGame_PointerPosition;
+        private readonly InputAction m_GameOfLifeGame_PlayPauseSimulation;
+        private readonly InputAction m_GameOfLifeGame_ResetSimulation;
         public struct GameOfLifeGameActions
         {
             private @GameOfLifeControls m_Wrapper;
             public GameOfLifeGameActions(@GameOfLifeControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @HoldPointer => m_Wrapper.m_GameOfLifeGame_HoldPointer;
             public InputAction @PointerPosition => m_Wrapper.m_GameOfLifeGame_PointerPosition;
+            public InputAction @PlayPauseSimulation => m_Wrapper.m_GameOfLifeGame_PlayPauseSimulation;
+            public InputAction @ResetSimulation => m_Wrapper.m_GameOfLifeGame_ResetSimulation;
             public InputActionMap Get() { return m_Wrapper.m_GameOfLifeGame; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -162,6 +208,12 @@ namespace GameOfLife.Input
                     @PointerPosition.started -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPointerPosition;
                     @PointerPosition.performed -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPointerPosition;
                     @PointerPosition.canceled -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPointerPosition;
+                    @PlayPauseSimulation.started -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPlayPauseSimulation;
+                    @PlayPauseSimulation.performed -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPlayPauseSimulation;
+                    @PlayPauseSimulation.canceled -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPlayPauseSimulation;
+                    @ResetSimulation.started -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnResetSimulation;
+                    @ResetSimulation.performed -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnResetSimulation;
+                    @ResetSimulation.canceled -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnResetSimulation;
                 }
                 m_Wrapper.m_GameOfLifeGameActionsCallbackInterface = instance;
                 if (instance != null)
@@ -172,6 +224,12 @@ namespace GameOfLife.Input
                     @PointerPosition.started += instance.OnPointerPosition;
                     @PointerPosition.performed += instance.OnPointerPosition;
                     @PointerPosition.canceled += instance.OnPointerPosition;
+                    @PlayPauseSimulation.started += instance.OnPlayPauseSimulation;
+                    @PlayPauseSimulation.performed += instance.OnPlayPauseSimulation;
+                    @PlayPauseSimulation.canceled += instance.OnPlayPauseSimulation;
+                    @ResetSimulation.started += instance.OnResetSimulation;
+                    @ResetSimulation.performed += instance.OnResetSimulation;
+                    @ResetSimulation.canceled += instance.OnResetSimulation;
                 }
             }
         }
@@ -180,6 +238,8 @@ namespace GameOfLife.Input
         {
             void OnHoldPointer(InputAction.CallbackContext context);
             void OnPointerPosition(InputAction.CallbackContext context);
+            void OnPlayPauseSimulation(InputAction.CallbackContext context);
+            void OnResetSimulation(InputAction.CallbackContext context);
         }
     }
 }

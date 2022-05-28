@@ -216,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateLoopDelay: 40
   isPaused: 0
-  aliveOnStartIndices:
+  aliveOnStartPositions:
   - {x: 5, y: 5}
   - {x: 5, y: 6}
   - {x: 5, y: 7}

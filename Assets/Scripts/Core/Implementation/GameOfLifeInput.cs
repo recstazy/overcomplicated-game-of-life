@@ -7,10 +7,12 @@ namespace GameOfLife.Input
 {
     public class GameOfLifeInput : IGameOfLifeInput
     {
-        public Vector2Int CurrentPointerPosition { get; private set; }
         public event Action<Vector2Int> OnPointerDrag;
         public event Action<bool> OnPointerHoldChanged;
+        public event Action OnPlayOrPause;
+        public event Action OnReset;
 
+        public Vector2Int CurrentPointerPosition { get; private set; }
         private GameOfLifeControls controls;
 
         public GameOfLifeInput()
@@ -18,6 +20,8 @@ namespace GameOfLife.Input
             controls = new GameOfLifeControls();
             controls.GameOfLifeGame.HoldPointer.started += HoldPointerTriggered;
             controls.GameOfLifeGame.HoldPointer.canceled += HoldPointerTriggered;
+            controls.GameOfLifeGame.PlayPauseSimulation.performed += PlayPausePerformed;
+            controls.GameOfLifeGame.ResetSimulation.performed += ResetPerformed;
             controls.Enable();
         }
 
@@ -43,6 +47,18 @@ namespace GameOfLife.Input
                 controls.GameOfLifeGame.HoldPointer.canceled -= HoldPointerTriggered;
                 controls.Dispose();
             }
+        }
+
+        private void ResetPerformed(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+                OnReset?.Invoke();
+        }
+
+        private void PlayPausePerformed(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+                OnPlayOrPause?.Invoke();
         }
 
         private void HoldPointerTriggered(InputAction.CallbackContext context)

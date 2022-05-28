@@ -8,6 +8,8 @@ namespace GameOfLife.Abstraction
     {
         event Action<Vector2Int> OnPointerDrag;
         event Action<bool> OnPointerHoldChanged;
+        event Action OnPlayOrPause;
+        event Action OnReset;
         Vector2Int CurrentPointerPosition { get; }
         void Update();
     }

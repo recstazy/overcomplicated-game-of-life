@@ -7,7 +7,6 @@ using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 using Zenject;
-using UnityEngine.InputSystem;
 
 namespace GameOfLife.Core.Ecs
 {
@@ -25,12 +24,12 @@ namespace GameOfLife.Core.Ecs
             input.OnPointerDrag += PointerDrag;
         }
 
-        public void Initialize(Vector2Int[] aliveOnStart)
+        public void Initialize()
         {
             var gridSize = Configuration.GridSize;
             var world = World.DefaultGameObjectInjectionWorld;
             var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            var aliveOnStartPositions = aliveOnStart.Select(x => ToInt2(x)).ToArray();
+            
             isAliveSystem = world.GetOrCreateSystem<IsAliveSystem>();
             isAliveSystem.SetGridSize(gridSize);
             world.GetOrCreateSystem<IsVisibleSystem>().SetColors(ToFloat4(Configuration.AliveColor), ToFloat4(Configuration.DeadColor));
@@ -51,7 +50,6 @@ namespace GameOfLife.Core.Ecs
                     var entity = entityManager.CreateEntity(archetype);
 
                     var cell = new Cell(new int2(x, y));
-                    cell.IsAlive = Array.IndexOf(aliveOnStartPositions, cell.Position) >= 0;
                     entityManager.AddComponentData(entity, cell);
                     entityManager.AddComponentData(entity, new Scale() { Value = 1f });
                     entityManager.AddComponentData(entity, new Translation() { Value = new float3(x, y, 0) });
@@ -63,6 +61,11 @@ namespace GameOfLife.Core.Ecs
                     entityManager.AddSharedComponentData(entity, renderer);
                 }
             }
+        }
+
+        public void Reset(Vector2Int[] newAlivePositions)
+        {
+            isAliveSystem.Reset(newAlivePositions.Select(x => ToInt2(x)).ToArray());
         }
 
         public void ScheduleUpdate() => isAliveSystem.ScheduleUpdate();

@@ -26,7 +26,7 @@ namespace GameOfLife.Core.Ecs
             world.GetOrCreateSystem<IsVisibleSystem>()
                 .SetColors(Configuration.AliveColor.ToFloat4(), Configuration.DeadColor.ToFloat4());
 
-            var parentArchetype = entityManager.CreateArchetype(GetCallParentComponentTypes());
+            var parentArchetype = entityManager.CreateArchetype(GetCellParentComponentTypes());
             var cellArchetype = entityManager.CreateArchetype(GetCellComponentTypes());
             cellsParent = entityManager.CreateEntity(parentArchetype);
 
@@ -85,7 +85,7 @@ namespace GameOfLife.Core.Ecs
             };
         }
 
-        private ComponentType[] GetCallParentComponentTypes()
+        private ComponentType[] GetCellParentComponentTypes()
         {
             return new ComponentType[]
             {

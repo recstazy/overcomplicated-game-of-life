@@ -11,9 +11,12 @@ namespace GameOfLife.Core
         [SerializeField]
         [Min(0)]
         private int updateLoopDelay;
-
+        
         [SerializeField]
         private Vector2Int[] aliveOnStartPositions;
+
+        [SerializeField]
+        private Transform gameOfLifePosition;
 
         private IGameConfiguration config;
         private IGameImplementationFactory implementationFactory;
@@ -39,6 +42,7 @@ namespace GameOfLife.Core
             implementation = implementationFactory.Create(config.Implementation);
             implementation.Configuration = config;
             implementation.Initialize();
+            implementation.SetPositionAndRotation(gameOfLifePosition.position, gameOfLifePosition.rotation);
             implementation.Reset(aliveOnStartPositions);
             StartUpdateLoop();
         }

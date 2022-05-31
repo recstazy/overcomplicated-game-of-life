@@ -1,12 +1,10 @@
 using GameOfLife.Abstraction;
-using System;
 using System.Linq;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
-using Zenject;
 
 namespace GameOfLife.Core.Ecs
 {
@@ -14,12 +12,13 @@ namespace GameOfLife.Core.Ecs
     {
         public IGameConfiguration Configuration { get; set; }
         private IsAliveSystem isAliveSystem;
+        private Entity cellsParent;
 
         public void Initialize()
         {
             var gridSize = Configuration.GridSize;
             var world = World.DefaultGameObjectInjectionWorld;
-            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            var entityManager = world.EntityManager;
             float cellSize = Configuration.CellSize;
 
             isAliveSystem = world.GetOrCreateSystem<IsAliveSystem>();
@@ -27,20 +26,16 @@ namespace GameOfLife.Core.Ecs
             world.GetOrCreateSystem<IsVisibleSystem>()
                 .SetColors(Configuration.AliveColor.ToFloat4(), Configuration.DeadColor.ToFloat4());
 
-            var archetype = entityManager.CreateArchetype(
-                typeof(Cell),
-                typeof(Translation),
-                typeof(Scale),
-                typeof(RenderMesh),
-                typeof(RenderBounds),
-                typeof(LocalToWorld),
-                typeof(UnlitColor));
+            var parentArchetype = entityManager.CreateArchetype(GetCallParentComponentTypes());
+            var cellArchetype = entityManager.CreateArchetype(GetCellComponentTypes());
+            cellsParent = entityManager.CreateEntity(parentArchetype);
 
             for (int x = 0; x < gridSize; x++)
             {
                 for (int y = 0; y < gridSize; y++)
                 {
-                    var entity = entityManager.CreateEntity(archetype);
+                    var entity = entityManager.CreateEntity(cellArchetype);
+                    entityManager.AddComponentData(entity, new Parent() { Value = cellsParent });
 
                     var cell = new Cell(new int2(x, y));
                     entityManager.AddComponentData(entity, cell);
@@ -64,5 +59,41 @@ namespace GameOfLife.Core.Ecs
         public void ScheduleUpdate() => isAliveSystem.ScheduleUpdate();
 
         public void Dispose() { }
+
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        {
+            var world = World.DefaultGameObjectInjectionWorld;
+            var entityManager = world.EntityManager;
+            entityManager.AddComponentData(cellsParent, new Translation() { Value = position });
+            entityManager.AddComponentData(cellsParent, new Rotation() { Value = rotation });
+        }
+
+        private ComponentType[] GetCellComponentTypes()
+        {
+            return new ComponentType[]
+            {
+                typeof(Cell),
+                typeof(LocalToWorld),
+                typeof(LocalToParent),
+                typeof(Parent),
+                typeof(Translation),
+                typeof(Rotation),
+                typeof(Scale),
+                typeof(RenderMesh),
+                typeof(RenderBounds),
+                typeof(UnlitColor),
+            };
+        }
+
+        private ComponentType[] GetCallParentComponentTypes()
+        {
+            return new ComponentType[]
+            {
+                typeof(CellsParent),
+                typeof(LocalToWorld),
+                typeof(Translation),
+                typeof(Rotation),
+            };
+        }
     }
 }

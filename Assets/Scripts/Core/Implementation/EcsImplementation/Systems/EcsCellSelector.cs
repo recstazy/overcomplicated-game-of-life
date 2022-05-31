@@ -40,25 +40,34 @@ namespace GameOfLife.Core.Ecs
             if (!isHoldingPointerDown)
                 return;
 
+            var planeOrigin = float3.zero;
+            var planeNormal = new float3(0f, 0f, -1f);
+            float4x4 parentLocalToWorld = default;
+
+            Entities.ForEach((in CellsParent parent, in Translation translation, in Rotation rotation, in LocalToWorld localToWorld) =>
+            {
+                planeOrigin = translation.Value;
+                planeNormal = math.mul(rotation.Value, planeNormal);
+                parentLocalToWorld = localToWorld.Value;
+            }).Run();
+
             var cameraInfo = new CameraInfo(mainCamera);
             var cellSize = new float2(configuration.CellSize, configuration.CellSize);
             var mousePosition = input.CurrentPointerPosition.ToFloat2();
-
             var ray = cameraInfo.ScreenPointToRay(mousePosition);
-            var planeOrigin = float3.zero;
-            var planeNormal = new float3(0f, 0f, -1f);
+            
             bool wasHit = MathExtensions.RaycastPlane(ray.origin, ray.direction, planeOrigin, planeNormal, out var mousePosOnGamePlane);
 
             if (!wasHit)
                 return;
 
-            Debug.DrawLine(Vector3.zero, mousePosOnGamePlane, Color.red);
+            var mouseLocalPosition = math.inverse(parentLocalToWorld).MultiplyPoint(mousePosOnGamePlane);
 
             Entities.ForEach((ref Cell cell, in Translation translation) =>
             {
                 var rect = new MathRect(cell.Position - cellSize * 0.5f, cellSize);
 
-                if (rect.Contains(mousePosOnGamePlane.ToFloat2()))
+                if (rect.Contains(mouseLocalPosition.ToFloat2()))
                     cell.IsAlive = true;
 
             }).Schedule();

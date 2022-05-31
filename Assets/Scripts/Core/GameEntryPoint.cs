@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GameOfLife.Abstraction;
 using Zenject;
 using System;
+using GameOfLife.Abstraction.View;
 
 namespace GameOfLife.Core
 {
@@ -13,24 +14,24 @@ namespace GameOfLife.Core
         private int updateLoopDelay;
         
         [SerializeField]
-        private Vector2Int[] aliveOnStartPositions;
-
-        [SerializeField]
         private Transform gameOfLifePosition;
 
         private IGameConfiguration config;
         private IGameImplementationFactory implementationFactory;
         private IGameOfLifeInput input;
         private IGameImplementation implementation;
+        private IGameOfLifeScreen view;
         private bool isPaused = true;
 
         [Inject]
         public void Construct(IGameConfiguration config, IGameImplementationFactory implementationFactory,
-            IGameOfLifeInput input, IFactory<GameImplementationType, ICellSelector> cellSelectorFactory)
+            IGameOfLifeInput input, IFactory<GameImplementationType, ICellSelector> cellSelectorFactory,
+            IGameOfLifeScreen view)
         {
             this.config = config;
             this.implementationFactory = implementationFactory;
             this.input = input;
+            this.view = view;
             cellSelectorFactory.Create(config.Implementation);
 
             input.OnReset += ResetGame;
@@ -43,7 +44,6 @@ namespace GameOfLife.Core
             implementation.Configuration = config;
             implementation.Initialize();
             implementation.SetPositionAndRotation(gameOfLifePosition.position, gameOfLifePosition.rotation);
-            implementation.Reset(aliveOnStartPositions);
             StartUpdateLoop();
         }
 
@@ -71,13 +71,14 @@ namespace GameOfLife.Core
         private void ResetGame()
         {
             SetPaused(true);
-            implementation?.Reset(aliveOnStartPositions);
+            implementation?.Reset(new Vector2Int[0]);
         }
 
         private void SetPaused(bool isPaused)
         {
             this.isPaused = isPaused;
             input.SetMouseInputActive(isPaused);
+            view?.SetIsPlayting(!isPaused);
         }
 
         private async void StartUpdateLoop()

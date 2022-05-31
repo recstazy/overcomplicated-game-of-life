@@ -6,9 +6,18 @@
             "id": "897bce75-4fe5-48d8-a7ae-e449f9577425",
             "actions": [
                 {
-                    "name": "HoldPointer",
+                    "name": "HoldAddCells",
                     "type": "Button",
                     "id": "599608e8-760e-45e2-a9f1-1de98ce9db53",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(pressPoint=0.5)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HoldRemoveCells",
+                    "type": "Button",
+                    "id": "861a38c9-f582-4bab-8fe2-b35b9deaffeb",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold(pressPoint=0.5)",
@@ -50,7 +59,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HoldPointer",
+                    "action": "HoldAddCells",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -84,6 +93,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ResetSimulation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9140d048-25ad-4876-90fc-6ca15541d924",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldRemoveCells",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

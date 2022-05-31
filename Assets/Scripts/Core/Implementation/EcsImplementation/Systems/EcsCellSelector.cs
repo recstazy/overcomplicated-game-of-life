@@ -11,6 +11,7 @@ namespace GameOfLife.Core.Ecs
     {
         private readonly IGameOfLifeInput input;
         private bool isHoldingPointerDown;
+        private bool isAddingCells;
         private IGameConfiguration configuration;
         private Camera mainCamera;
 
@@ -40,6 +41,8 @@ namespace GameOfLife.Core.Ecs
             if (!isHoldingPointerDown)
                 return;
 
+            var isAddingCells = this.isAddingCells;
+
             var planeOrigin = float3.zero;
             var planeNormal = new float3(0f, 0f, -1f);
             float4x4 parentLocalToWorld = default;
@@ -68,7 +71,7 @@ namespace GameOfLife.Core.Ecs
                 var rect = new MathRect(cell.Position - cellSize * 0.5f, cellSize);
 
                 if (rect.Contains(mouseLocalPosition.ToFloat2()))
-                    cell.IsAlive = true;
+                    cell.IsAlive = isAddingCells;
 
             }).Schedule();
         }
@@ -76,6 +79,7 @@ namespace GameOfLife.Core.Ecs
         private void PointerHoldChanged(bool isDown)
         {
             isHoldingPointerDown = isDown;
+            isAddingCells = input.IsAddingCells;
         }
     }
 }

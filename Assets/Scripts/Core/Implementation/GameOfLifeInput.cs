@@ -13,13 +13,16 @@ namespace GameOfLife.Input
         public event Action OnReset;
 
         public Vector2Int CurrentPointerPosition { get; private set; }
+        public bool IsAddingCells { get; private set; }
         private GameOfLifeControls controls;
 
         public GameOfLifeInput()
         {
             controls = new GameOfLifeControls();
-            controls.GameOfLifeGame.HoldPointer.started += HoldPointerTriggered;
-            controls.GameOfLifeGame.HoldPointer.canceled += HoldPointerTriggered;
+            controls.GameOfLifeGame.HoldAddCells.started += HoldAddCellsTriggered;
+            controls.GameOfLifeGame.HoldAddCells.canceled += HoldAddCellsTriggered;
+            controls.GameOfLifeGame.HoldRemoveCells.started += HoldRemoveCellsTriggered;
+            controls.GameOfLifeGame.HoldRemoveCells.canceled += HoldRemoveCellsTriggered;
             controls.GameOfLifeGame.PlayPauseSimulation.performed += PlayPausePerformed;
             controls.GameOfLifeGame.ResetSimulation.performed += ResetPerformed;
             controls.Enable();
@@ -27,7 +30,7 @@ namespace GameOfLife.Input
 
         public void Update()
         {
-            if (controls.GameOfLifeGame.HoldPointer.IsPressed())
+            if (controls.GameOfLifeGame.HoldAddCells.IsPressed() || controls.GameOfLifeGame.HoldRemoveCells.IsPressed())
             {
                 var newPointerPosition = Vector2Int.RoundToInt(controls.GameOfLifeGame.PointerPosition.ReadValue<Vector2>());
 
@@ -43,8 +46,10 @@ namespace GameOfLife.Input
         {
             if (controls != null)
             {
-                controls.GameOfLifeGame.HoldPointer.started -= HoldPointerTriggered;
-                controls.GameOfLifeGame.HoldPointer.canceled -= HoldPointerTriggered;
+                controls.GameOfLifeGame.HoldAddCells.started -= HoldAddCellsTriggered;
+                controls.GameOfLifeGame.HoldAddCells.canceled -= HoldAddCellsTriggered;
+                controls.GameOfLifeGame.HoldRemoveCells.started -= HoldRemoveCellsTriggered;
+                controls.GameOfLifeGame.HoldRemoveCells.canceled -= HoldRemoveCellsTriggered;
                 controls.Dispose();
             }
         }
@@ -52,9 +57,15 @@ namespace GameOfLife.Input
         public void SetMouseInputActive(bool isActive)
         {
             if (isActive)
-                controls.GameOfLifeGame.HoldPointer.Enable();
+            {
+                controls.GameOfLifeGame.HoldAddCells.Enable();
+                controls.GameOfLifeGame.HoldRemoveCells.Enable();
+            }
             else
-                controls.GameOfLifeGame.HoldPointer.Disable();
+            {
+                controls.GameOfLifeGame.HoldAddCells.Disable();
+                controls.GameOfLifeGame.HoldRemoveCells.Disable();
+            }
         }
 
         private void ResetPerformed(InputAction.CallbackContext context)
@@ -69,8 +80,26 @@ namespace GameOfLife.Input
                 OnPlayOrPause?.Invoke();
         }
 
-        private void HoldPointerTriggered(InputAction.CallbackContext context)
+        private void HoldAddCellsTriggered(InputAction.CallbackContext context)
         {
+            if (controls.GameOfLifeGame.HoldRemoveCells.IsPressed())
+                return;
+
+            IsAddingCells = true;
+
+            if (context.started)
+                OnPointerHoldChanged?.Invoke(true);
+            else if (context.canceled)
+                OnPointerHoldChanged?.Invoke(false);
+        }
+
+        private void HoldRemoveCellsTriggered(InputAction.CallbackContext context)
+        {
+            if (controls.GameOfLifeGame.HoldAddCells.IsPressed())
+                return;
+
+            IsAddingCells = false;
+
             if (context.started)
                 OnPointerHoldChanged?.Invoke(true);
             else if (context.canceled)

@@ -30,9 +30,18 @@ namespace GameOfLife.Input
             ""id"": ""897bce75-4fe5-48d8-a7ae-e449f9577425"",
             ""actions"": [
                 {
-                    ""name"": ""HoldPointer"",
+                    ""name"": ""HoldAddCells"",
                     ""type"": ""Button"",
                     ""id"": ""599608e8-760e-45e2-a9f1-1de98ce9db53"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(pressPoint=0.5)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HoldRemoveCells"",
+                    ""type"": ""Button"",
+                    ""id"": ""861a38c9-f582-4bab-8fe2-b35b9deaffeb"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold(pressPoint=0.5)"",
@@ -74,7 +83,7 @@ namespace GameOfLife.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HoldPointer"",
+                    ""action"": ""HoldAddCells"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -110,6 +119,17 @@ namespace GameOfLife.Input
                     ""action"": ""ResetSimulation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9140d048-25ad-4876-90fc-6ca15541d924"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldRemoveCells"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -118,7 +138,8 @@ namespace GameOfLife.Input
 }");
             // GameOfLifeGame
             m_GameOfLifeGame = asset.FindActionMap("GameOfLifeGame", throwIfNotFound: true);
-            m_GameOfLifeGame_HoldPointer = m_GameOfLifeGame.FindAction("HoldPointer", throwIfNotFound: true);
+            m_GameOfLifeGame_HoldAddCells = m_GameOfLifeGame.FindAction("HoldAddCells", throwIfNotFound: true);
+            m_GameOfLifeGame_HoldRemoveCells = m_GameOfLifeGame.FindAction("HoldRemoveCells", throwIfNotFound: true);
             m_GameOfLifeGame_PointerPosition = m_GameOfLifeGame.FindAction("PointerPosition", throwIfNotFound: true);
             m_GameOfLifeGame_PlayPauseSimulation = m_GameOfLifeGame.FindAction("PlayPauseSimulation", throwIfNotFound: true);
             m_GameOfLifeGame_ResetSimulation = m_GameOfLifeGame.FindAction("ResetSimulation", throwIfNotFound: true);
@@ -181,7 +202,8 @@ namespace GameOfLife.Input
         // GameOfLifeGame
         private readonly InputActionMap m_GameOfLifeGame;
         private IGameOfLifeGameActions m_GameOfLifeGameActionsCallbackInterface;
-        private readonly InputAction m_GameOfLifeGame_HoldPointer;
+        private readonly InputAction m_GameOfLifeGame_HoldAddCells;
+        private readonly InputAction m_GameOfLifeGame_HoldRemoveCells;
         private readonly InputAction m_GameOfLifeGame_PointerPosition;
         private readonly InputAction m_GameOfLifeGame_PlayPauseSimulation;
         private readonly InputAction m_GameOfLifeGame_ResetSimulation;
@@ -189,7 +211,8 @@ namespace GameOfLife.Input
         {
             private @GameOfLifeControls m_Wrapper;
             public GameOfLifeGameActions(@GameOfLifeControls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @HoldPointer => m_Wrapper.m_GameOfLifeGame_HoldPointer;
+            public InputAction @HoldAddCells => m_Wrapper.m_GameOfLifeGame_HoldAddCells;
+            public InputAction @HoldRemoveCells => m_Wrapper.m_GameOfLifeGame_HoldRemoveCells;
             public InputAction @PointerPosition => m_Wrapper.m_GameOfLifeGame_PointerPosition;
             public InputAction @PlayPauseSimulation => m_Wrapper.m_GameOfLifeGame_PlayPauseSimulation;
             public InputAction @ResetSimulation => m_Wrapper.m_GameOfLifeGame_ResetSimulation;
@@ -202,9 +225,12 @@ namespace GameOfLife.Input
             {
                 if (m_Wrapper.m_GameOfLifeGameActionsCallbackInterface != null)
                 {
-                    @HoldPointer.started -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldPointer;
-                    @HoldPointer.performed -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldPointer;
-                    @HoldPointer.canceled -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldPointer;
+                    @HoldAddCells.started -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldAddCells;
+                    @HoldAddCells.performed -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldAddCells;
+                    @HoldAddCells.canceled -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldAddCells;
+                    @HoldRemoveCells.started -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldRemoveCells;
+                    @HoldRemoveCells.performed -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldRemoveCells;
+                    @HoldRemoveCells.canceled -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnHoldRemoveCells;
                     @PointerPosition.started -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPointerPosition;
                     @PointerPosition.performed -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPointerPosition;
                     @PointerPosition.canceled -= m_Wrapper.m_GameOfLifeGameActionsCallbackInterface.OnPointerPosition;
@@ -218,9 +244,12 @@ namespace GameOfLife.Input
                 m_Wrapper.m_GameOfLifeGameActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @HoldPointer.started += instance.OnHoldPointer;
-                    @HoldPointer.performed += instance.OnHoldPointer;
-                    @HoldPointer.canceled += instance.OnHoldPointer;
+                    @HoldAddCells.started += instance.OnHoldAddCells;
+                    @HoldAddCells.performed += instance.OnHoldAddCells;
+                    @HoldAddCells.canceled += instance.OnHoldAddCells;
+                    @HoldRemoveCells.started += instance.OnHoldRemoveCells;
+                    @HoldRemoveCells.performed += instance.OnHoldRemoveCells;
+                    @HoldRemoveCells.canceled += instance.OnHoldRemoveCells;
                     @PointerPosition.started += instance.OnPointerPosition;
                     @PointerPosition.performed += instance.OnPointerPosition;
                     @PointerPosition.canceled += instance.OnPointerPosition;
@@ -236,7 +265,8 @@ namespace GameOfLife.Input
         public GameOfLifeGameActions @GameOfLifeGame => new GameOfLifeGameActions(this);
         public interface IGameOfLifeGameActions
         {
-            void OnHoldPointer(InputAction.CallbackContext context);
+            void OnHoldAddCells(InputAction.CallbackContext context);
+            void OnHoldRemoveCells(InputAction.CallbackContext context);
             void OnPointerPosition(InputAction.CallbackContext context);
             void OnPlayPauseSimulation(InputAction.CallbackContext context);
             void OnResetSimulation(InputAction.CallbackContext context);

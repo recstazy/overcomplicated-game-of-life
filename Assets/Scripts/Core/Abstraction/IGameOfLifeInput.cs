@@ -13,5 +13,6 @@ namespace GameOfLife.Abstraction
         Vector2Int CurrentPointerPosition { get; }
         void Update();
         void SetMouseInputActive(bool isActive);
+        bool IsAddingCells { get; }
     }
 }

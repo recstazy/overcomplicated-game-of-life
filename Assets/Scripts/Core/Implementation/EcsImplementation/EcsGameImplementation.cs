@@ -12,7 +12,7 @@ namespace GameOfLife.Core.Ecs
 {
     public class EcsGameImplementation : IGameImplementation
     {
-        public IGameConfguration Configuration { get; set; }
+        public IGameConfiguration Configuration { get; set; }
         private IsAliveSystem isAliveSystem;
 
         public void Initialize()
@@ -20,11 +20,12 @@ namespace GameOfLife.Core.Ecs
             var gridSize = Configuration.GridSize;
             var world = World.DefaultGameObjectInjectionWorld;
             var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            
+            float cellSize = Configuration.CellSize;
+
             isAliveSystem = world.GetOrCreateSystem<IsAliveSystem>();
             isAliveSystem.SetGridSize(gridSize);
             world.GetOrCreateSystem<IsVisibleSystem>()
-                .SetColors(ToFloat4(Configuration.AliveColor), ToFloat4(Configuration.DeadColor));
+                .SetColors(Configuration.AliveColor.ToFloat4(), Configuration.DeadColor.ToFloat4());
 
             var archetype = entityManager.CreateArchetype(
                 typeof(Cell),
@@ -43,8 +44,8 @@ namespace GameOfLife.Core.Ecs
 
                     var cell = new Cell(new int2(x, y));
                     entityManager.AddComponentData(entity, cell);
-                    entityManager.AddComponentData(entity, new Scale() { Value = 1f });
-                    entityManager.AddComponentData(entity, new Translation() { Value = new float3(x, y, 0) });
+                    entityManager.AddComponentData(entity, new Scale() { Value = cellSize });
+                    entityManager.AddComponentData(entity, new Translation() { Value = new float3(x * cellSize, y * cellSize, 0) });
                     entityManager.AddComponentData(entity, new UnlitColor() { Value = float4.zero });
 
                     var renderer = new RenderMesh();
@@ -57,17 +58,11 @@ namespace GameOfLife.Core.Ecs
 
         public void Reset(Vector2Int[] newAlivePositions)
         {
-            isAliveSystem.Reset(newAlivePositions.Select(x => ToInt2(x)).ToArray());
+            isAliveSystem.Reset(newAlivePositions.Select(x => x.ToInt2()).ToArray());
         }
 
         public void ScheduleUpdate() => isAliveSystem.ScheduleUpdate();
 
         public void Dispose() { }
-
-        private float4 ToFloat4(Color color) 
-            => new float4(color.r, color.g, color.b, color.a);
-
-        private int2 ToInt2(Vector2Int vector)
-            => new int2(vector.x, vector.y);
     }
 }

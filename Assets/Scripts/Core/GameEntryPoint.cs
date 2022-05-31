@@ -15,14 +15,14 @@ namespace GameOfLife.Core
         [SerializeField]
         private Vector2Int[] aliveOnStartPositions;
 
-        private IGameConfguration config;
+        private IGameConfiguration config;
         private IGameImplementationFactory implementationFactory;
         private IGameOfLifeInput input;
         private IGameImplementation implementation;
         private bool isPaused = true;
 
         [Inject]
-        public void Construct(IGameConfguration config, IGameImplementationFactory implementationFactory,
+        public void Construct(IGameConfiguration config, IGameImplementationFactory implementationFactory,
             IGameOfLifeInput input, IFactory<GameImplementationType, ICellSelector> cellSelectorFactory)
         {
             this.config = config;

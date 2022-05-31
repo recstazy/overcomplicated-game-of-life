@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: MainInstaller
   m_EditorClassIdentifier: 
   configuration:
+    implementationType: 0
     gridSize: 64
+    cellSize: 1
     cellMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
     cellMaterial: {fileID: 2100000, guid: 0b1f585caa72cfd42a5b5107851358c1, type: 2}
     aliveColor: {r: 1, g: 1, b: 1, a: 1}

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GameOfLife.Core
 {
     [Serializable]
-    public class GameConfiguration : IGameConfguration
+    public class GameConfiguration : IGameConfiguration
     {
         [SerializeField]
         private GameImplementationType implementationType;
@@ -13,6 +13,9 @@ namespace GameOfLife.Core
         [SerializeField]
         [Min(2)]
         private int gridSize = 5;
+
+        [SerializeField]
+        private float cellSize = 1f;
 
         [SerializeField]
         private Mesh cellMesh;
@@ -27,6 +30,7 @@ namespace GameOfLife.Core
         private Color deadColor = Color.black;
 
         public int GridSize => gridSize;
+        public float CellSize => cellSize;
         public Mesh CellMesh => cellMesh;
         public Material CellMaterial => cellMaterial;
         public Color AliveColor => aliveColor;

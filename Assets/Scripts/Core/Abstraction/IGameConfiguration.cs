@@ -2,10 +2,11 @@ using UnityEngine;
 
 namespace GameOfLife.Abstraction
 {
-    public interface IGameConfguration
+    public interface IGameConfiguration
     {
         GameImplementationType Implementation { get; }
         int GridSize { get; }
+        float CellSize { get; }
         Mesh CellMesh { get; }
         Material CellMaterial { get; }
         Color AliveColor { get; }

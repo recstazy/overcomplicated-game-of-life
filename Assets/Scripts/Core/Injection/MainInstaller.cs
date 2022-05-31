@@ -16,7 +16,7 @@ namespace GameOfLife.Core.Injection
             Container.BindInterfacesTo<GameImplementationFactory>().AsTransient();
             Container.BindInterfacesTo<CellSelectorFactory>().AsTransient();
             Container.BindInterfacesTo<GameOfLifeInput>().AsSingle();
-            Container.Bind<IGameConfguration>().FromInstance(configuration).AsSingle();
+            Container.Bind<IGameConfiguration>().FromInstance(configuration).AsSingle();
         }
     }
 }

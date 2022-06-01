@@ -43,6 +43,7 @@ namespace GameOfLife.Core
 
         private void Start()
         {
+            SetPaused(true);
             implementation = implementationFactory.Create(config.Implementation);
             implementation.Configuration = config;
             implementation.Initialize();

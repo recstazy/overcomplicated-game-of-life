@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Threading.Tasks;
 using GameOfLife.Abstraction;
 using Zenject;
-using System;
 using GameOfLife.Abstraction.View;
 
 namespace GameOfLife.Core
@@ -10,11 +9,15 @@ namespace GameOfLife.Core
     public class GameEntryPoint : MonoBehaviour
     {
         [SerializeField]
+        private Transform gameRectMin;
+
+        [SerializeField]
+        private Transform gameRectMax;
+
+        [SerializeField]
         [Min(0)]
         private int updateLoopDelay;
         
-        [SerializeField]
-        private Transform gameOfLifePosition;
 
         private IGameConfiguration config;
         private IGameImplementationFactory implementationFactory;
@@ -43,7 +46,9 @@ namespace GameOfLife.Core
             implementation = implementationFactory.Create(config.Implementation);
             implementation.Configuration = config;
             implementation.Initialize();
-            implementation.SetPositionAndRotation(gameOfLifePosition.position, gameOfLifePosition.rotation);
+
+            CalculateGameRect(out var position, out var rotation, out var size);
+            implementation.FitToRect(position, rotation, size);
             StartUpdateLoop();
         }
 
@@ -90,6 +95,18 @@ namespace GameOfLife.Core
 
                 await Task.Delay(updateLoopDelay);
             }
+        }
+
+        private void CalculateGameRect(out Vector3 position, out Quaternion rotation, out Vector2 rectSize)
+        {
+            var rectSize3d = gameRectMax.position - gameRectMin.position;
+            var forward = Vector3.Cross(rectSize3d, Vector3.up);
+
+            position = gameRectMin.position;
+            rotation = Quaternion.LookRotation(forward, Vector3.up);
+            var matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
+            var localSize = matrix.MultiplyPoint3x4(gameRectMax.position) - matrix.MultiplyPoint3x4(gameRectMin.position);
+            rectSize = localSize;
         }
     }
 }

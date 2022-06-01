@@ -9,6 +9,6 @@ namespace GameOfLife.Abstraction
         void Initialize();
         void ScheduleUpdate();
         void Reset(Vector2Int[] newAlivePositions);
-        void SetPositionAndRotation(Vector3 position, Quaternion rotation);
+        void FitToRect(Vector3 position, Quaternion rotation, Vector2 rectSize);
     }
 }

@@ -60,12 +60,22 @@ namespace GameOfLife.Core.Ecs
 
         public void Dispose() { }
 
-        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        public void FitToRect(Vector3 position, Quaternion rotation, Vector2 rectSize)
         {
             var world = World.DefaultGameObjectInjectionWorld;
             var entityManager = world.EntityManager;
-            entityManager.AddComponentData(cellsParent, new Translation() { Value = position });
+            
+            var currentGameSize = Configuration.CellSize * Configuration.GridSize;
+            var minRectSideLength = math.min(rectSize.x, rectSize.y);
+            var scale = minRectSideLength / currentGameSize;
+
+            var rectCenter = rectSize * 0.5f;
+            var gameRectCenter = Vector2.one * currentGameSize * scale * 0.5f;
+            var offset = rotation * (rectCenter - gameRectCenter + Vector2.one * Configuration.CellSize * 0.5f * scale);
+
+            entityManager.AddComponentData(cellsParent, new Translation() { Value = position + offset });
             entityManager.AddComponentData(cellsParent, new Rotation() { Value = rotation });
+            entityManager.AddComponentData(cellsParent, new Scale() { Value = scale });
         }
 
         private ComponentType[] GetCellComponentTypes()
@@ -93,6 +103,7 @@ namespace GameOfLife.Core.Ecs
                 typeof(LocalToWorld),
                 typeof(Translation),
                 typeof(Rotation),
+                typeof(Scale),
             };
         }
     }

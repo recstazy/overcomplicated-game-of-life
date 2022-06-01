@@ -28,6 +28,15 @@ namespace GameOfLife
         [SerializeField]
         private Color deadColor = Color.black;
 
+        [SerializeField]
+        private int minUpdateInterval = 20;
+
+        [SerializeField]
+        private int maxUpdateInterval = 500;
+
+        [SerializeField]
+        private int defaultUpdateInterval = 40;
+
         public int GridSize => gridSize;
         public float CellSize => cellSize;
         public Mesh CellMesh => cellMesh;
@@ -35,5 +44,8 @@ namespace GameOfLife
         public Color AliveColor => aliveColor;
         public Color DeadColor => deadColor;
         public GameImplementationType Implementation => implementationType;
+        public int MinUpdateInterval => minUpdateInterval;
+        public int MaxUpdateInterval => maxUpdateInterval;
+        public int DefaultUpdateInterval => defaultUpdateInterval;
     }
 }

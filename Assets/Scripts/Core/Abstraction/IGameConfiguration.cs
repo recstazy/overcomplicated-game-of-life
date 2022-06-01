@@ -11,5 +11,8 @@ namespace GameOfLife.Abstraction
         Material CellMaterial { get; }
         Color AliveColor { get; }
         Color DeadColor { get; }
+        int MinUpdateInterval { get; }
+        int MaxUpdateInterval { get; }
+        int DefaultUpdateInterval { get; }
     }
 }

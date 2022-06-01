@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: GameConfiguration
   m_EditorClassIdentifier: 
   implementationType: 0
-  gridSize: 64
+  gridSize: 128
   cellSize: 1
   cellMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   cellMaterial: {fileID: 2100000, guid: 0b1f585caa72cfd42a5b5107851358c1, type: 2}
   aliveColor: {r: 1, g: 1, b: 1, a: 1}
   deadColor: {r: 0, g: 0, b: 0, a: 1}
+  minUpdateInterval: 20
+  maxUpdateInterval: 500
+  defaultUpdateInterval: 40

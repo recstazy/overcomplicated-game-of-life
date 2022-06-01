@@ -14,11 +14,8 @@ namespace GameOfLife.Core
         [SerializeField]
         private Transform gameRectMax;
 
-        [SerializeField]
-        [Min(0)]
-        private int updateLoopDelay;
+        private int updateInterval;
         
-
         private IGameConfiguration config;
         private IGameImplementationFactory implementationFactory;
         private IGameOfLifeInput input;
@@ -39,6 +36,8 @@ namespace GameOfLife.Core
 
             input.OnReset += ResetGame;
             input.OnPlayOrPause += PlayPause;
+
+            view.OnUpdateIntervalChanged += ChangeUpdateInterval;
         }
 
         private void Start()
@@ -50,6 +49,8 @@ namespace GameOfLife.Core
 
             CalculateGameRect(out var position, out var rotation, out var size);
             implementation.FitToRect(position, rotation, size);
+
+            ChangeUpdateInterval(config.DefaultUpdateInterval);
             StartUpdateLoop();
         }
 
@@ -66,6 +67,11 @@ namespace GameOfLife.Core
             {
                 input.OnReset -= ResetGame;
                 input.OnPlayOrPause -= PlayPause;
+            }
+
+            if (view != null)
+            {
+                view.OnUpdateIntervalChanged -= ChangeUpdateInterval;
             }
         }
 
@@ -94,7 +100,7 @@ namespace GameOfLife.Core
                 if (!isPaused)
                     implementation.ScheduleUpdate();
 
-                await Task.Delay(updateLoopDelay);
+                await Task.Delay(updateInterval);
             }
         }
 
@@ -108,6 +114,11 @@ namespace GameOfLife.Core
             var matrix = Matrix4x4.TRS(position, rotation, Vector3.one);
             var localSize = matrix.MultiplyPoint3x4(gameRectMax.position) - matrix.MultiplyPoint3x4(gameRectMin.position);
             rectSize = localSize;
+        }
+
+        private void ChangeUpdateInterval(int newValue)
+        {
+            updateInterval = newValue;
         }
     }
 }

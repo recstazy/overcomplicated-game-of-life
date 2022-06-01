@@ -6,7 +6,7 @@ using GameOfLife.Abstraction.View;
 
 namespace GameOfLife.Core
 {
-    public class GameEntryPoint : MonoBehaviour
+    public class GameController : MonoBehaviour
     {
         [SerializeField]
         private Transform gameRectMin;

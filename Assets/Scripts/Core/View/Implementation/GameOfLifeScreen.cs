@@ -4,7 +4,7 @@ using GameOfLife.Abstraction.View;
 
 namespace GameOfLife.View
 {
-    public class GameOfLiveScreen : MonoBehaviour, IGameOfLifeScreen
+    public class GameOfLifeScreen : MonoBehaviour, IGameOfLifeScreen
     {
         [SerializeField]
         private TextMeshProUGUI isPlayingLabel;

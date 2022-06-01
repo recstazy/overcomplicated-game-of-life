@@ -14,7 +14,7 @@ namespace GameOfLife
         private ScriptableGameConfiguration gameConfig;
 
         [SerializeField]
-        private GameOfLiveScreen gameOfLifeView;
+        private GameOfLifeScreen gameOfLifeView;
 
         public override void InstallBindings()
         {

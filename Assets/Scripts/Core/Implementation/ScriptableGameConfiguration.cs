@@ -37,6 +37,9 @@ namespace GameOfLife
         [SerializeField]
         private int defaultUpdateInterval = 40;
 
+        [SerializeField]
+        private float cellDeathAnimationTime;
+
         public int GridSize => gridSize;
         public float CellSize => cellSize;
         public Mesh CellMesh => cellMesh;
@@ -47,5 +50,6 @@ namespace GameOfLife
         public int MinUpdateInterval => minUpdateInterval;
         public int MaxUpdateInterval => maxUpdateInterval;
         public int DefaultUpdateInterval => defaultUpdateInterval;
+        public float CellDeathAnimationTime => cellDeathAnimationTime;
     }
 }

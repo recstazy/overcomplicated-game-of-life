@@ -23,8 +23,9 @@ namespace GameOfLife.Core.Ecs
 
             isAliveSystem = world.GetOrCreateSystem<IsAliveSystem>();
             isAliveSystem.SetGridSize(gridSize);
-            world.GetOrCreateSystem<IsVisibleSystem>()
-                .SetColors(Configuration.AliveColor.ToFloat4(), Configuration.DeadColor.ToFloat4());
+            var isVisibleSystem = world.GetOrCreateSystem<IsVisibleSystem>();
+            isVisibleSystem.SetColors(Configuration.AliveColor.ToFloat4(), Configuration.DeadColor.ToFloat4());
+            isVisibleSystem.SetDeathAnimationTime(Configuration.CellDeathAnimationTime);
 
             var parentArchetype = entityManager.CreateArchetype(GetCellParentComponentTypes());
             var cellArchetype = entityManager.CreateArchetype(GetCellComponentTypes());
@@ -92,6 +93,7 @@ namespace GameOfLife.Core.Ecs
                 typeof(RenderMesh),
                 typeof(RenderBounds),
                 typeof(UnlitColor),
+                typeof(CellColorLerpFactor),
             };
         }
 

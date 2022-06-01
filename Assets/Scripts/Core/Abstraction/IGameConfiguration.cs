@@ -14,5 +14,6 @@ namespace GameOfLife.Abstraction
         int MinUpdateInterval { get; }
         int MaxUpdateInterval { get; }
         int DefaultUpdateInterval { get; }
+        float CellDeathAnimationTime { get; }
     }
 }

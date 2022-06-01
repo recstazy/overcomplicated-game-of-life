@@ -22,3 +22,4 @@ MonoBehaviour:
   minUpdateInterval: 20
   maxUpdateInterval: 500
   defaultUpdateInterval: 40
+  cellDeathAnimationTime: 0.3

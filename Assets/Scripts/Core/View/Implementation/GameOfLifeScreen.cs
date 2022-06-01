@@ -11,6 +11,7 @@ namespace GameOfLife.View
     public class GameOfLifeScreen : MonoBehaviour, IGameOfLifeScreen
     {
         public event Action<int> OnUpdateIntervalChanged;
+        public event Action<float> OnResponseTimeChanged;
 
         [SerializeField]
         private TextMeshProUGUI isPlayingLabel;
@@ -21,7 +22,14 @@ namespace GameOfLife.View
         [SerializeField]
         private TextMeshProUGUI intervalValueLabel;
 
+        [SerializeField]
+        private Slider responseTimeSlider;
+
+        [SerializeField]
+        private TextMeshProUGUI responseTimeValueLabel;
+
         private IGameConfiguration configuration;
+        private const string RESPONSE_TIME_FORMAT = "#0";
 
         [Inject]
         public void Construct(IGameConfiguration configuration)
@@ -31,10 +39,15 @@ namespace GameOfLife.View
 
         private void Awake()
         {
-            var sliderValue = Mathf.InverseLerp(configuration.MinUpdateInterval, configuration.MaxUpdateInterval, configuration.DefaultUpdateInterval);
-            intervalSlider.SetValueWithoutNotify(sliderValue);
+            var intervalSliderValue = Mathf.InverseLerp(configuration.MinUpdateInterval, configuration.MaxUpdateInterval, configuration.DefaultUpdateInterval);
+            intervalSlider.SetValueWithoutNotify(intervalSliderValue);
             intervalValueLabel.text = configuration.DefaultUpdateInterval.ToString();
             intervalSlider.onValueChanged.AddListener(SpeedSliderValueChanged);
+
+            var responseTimeSliderValue = Mathf.InverseLerp(configuration.MinPixelResponseTime, configuration.MaxPixelResponseTime, configuration.DefaultPixelResponseTime);
+            responseTimeSlider.SetValueWithoutNotify(responseTimeSliderValue);
+            responseTimeValueLabel.text = (configuration.DefaultPixelResponseTime * 1000f).ToString(RESPONSE_TIME_FORMAT);
+            responseTimeSlider.onValueChanged.AddListener(ResponseTimeSliderValueChanged);
         }
 
         public void SetIsPlayting(bool isPlaying)
@@ -44,15 +57,17 @@ namespace GameOfLife.View
 
         private void SpeedSliderValueChanged(float newValue)
         {
-            var clampedIntervalValue = ClampAndRoundInterval(newValue);
-            OnUpdateIntervalChanged?.Invoke(clampedIntervalValue);
-            intervalValueLabel.text = clampedIntervalValue.ToString();
+            var intervalValue = Mathf.Lerp(configuration.MinUpdateInterval, configuration.MaxUpdateInterval, newValue);
+            var roundedValue = Mathf.RoundToInt(intervalValue);
+            OnUpdateIntervalChanged?.Invoke(roundedValue);
+            intervalValueLabel.text = roundedValue.ToString();
         }
 
-        private int ClampAndRoundInterval(float rawValue)
+        private void ResponseTimeSliderValueChanged(float newValue)
         {
-            var intervalValue = Mathf.Lerp(configuration.MinUpdateInterval, configuration.MaxUpdateInterval, rawValue);
-            return Mathf.RoundToInt(intervalValue);
+            var newResponseTime = Mathf.Lerp(configuration.MinPixelResponseTime, configuration.MaxPixelResponseTime, newValue);
+            OnResponseTimeChanged?.Invoke(newResponseTime);
+            responseTimeValueLabel.text = (newResponseTime * 1000f).ToString(RESPONSE_TIME_FORMAT);
         }
     }
 }

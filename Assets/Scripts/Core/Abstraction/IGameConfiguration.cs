@@ -14,6 +14,8 @@ namespace GameOfLife.Abstraction
         int MinUpdateInterval { get; }
         int MaxUpdateInterval { get; }
         int DefaultUpdateInterval { get; }
-        float CellDeathAnimationTime { get; }
+        float DefaultPixelResponseTime { get; }
+        float MinPixelResponseTime { get; }
+        float MaxPixelResponseTime { get; }
     }
 }

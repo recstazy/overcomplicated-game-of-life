@@ -10,5 +10,6 @@ namespace GameOfLife.Abstraction
         void ScheduleUpdate();
         void Reset(Vector2Int[] newAlivePositions);
         void FitToRect(Vector3 position, Quaternion rotation, Vector2 rectSize);
+        void SetPixelResponseTime(float newResponseTime);
     }
 }

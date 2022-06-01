@@ -25,7 +25,6 @@ namespace GameOfLife.Core.Ecs
             isAliveSystem.SetGridSize(gridSize);
             var isVisibleSystem = world.GetOrCreateSystem<IsVisibleSystem>();
             isVisibleSystem.SetColors(Configuration.AliveColor.ToFloat4(), Configuration.DeadColor.ToFloat4());
-            isVisibleSystem.SetDeathAnimationTime(Configuration.CellDeathAnimationTime);
 
             var parentArchetype = entityManager.CreateArchetype(GetCellParentComponentTypes());
             var cellArchetype = entityManager.CreateArchetype(GetCellComponentTypes());
@@ -77,6 +76,12 @@ namespace GameOfLife.Core.Ecs
             entityManager.AddComponentData(cellsParent, new Translation() { Value = position + offset });
             entityManager.AddComponentData(cellsParent, new Rotation() { Value = rotation });
             entityManager.AddComponentData(cellsParent, new Scale() { Value = scale });
+        }
+
+        public void SetPixelResponseTime(float newResponseTime)
+        {
+            World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<IsVisibleSystem>()
+                .SetDeathAnimationTime(newResponseTime);
         }
 
         private ComponentType[] GetCellComponentTypes()

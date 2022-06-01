@@ -38,7 +38,13 @@ namespace GameOfLife
         private int defaultUpdateInterval = 40;
 
         [SerializeField]
-        private float cellDeathAnimationTime;
+        private float minPixelResponseTime;
+
+        [SerializeField]
+        private float maxPixelResponseTime;
+
+        [SerializeField]
+        private float defaultPixelResponseTime;
 
         public int GridSize => gridSize;
         public float CellSize => cellSize;
@@ -50,6 +56,8 @@ namespace GameOfLife
         public int MinUpdateInterval => minUpdateInterval;
         public int MaxUpdateInterval => maxUpdateInterval;
         public int DefaultUpdateInterval => defaultUpdateInterval;
-        public float CellDeathAnimationTime => cellDeathAnimationTime;
+        public float DefaultPixelResponseTime => defaultPixelResponseTime;
+        public float MinPixelResponseTime => minPixelResponseTime;
+        public float MaxPixelResponseTime => maxPixelResponseTime;
     }
 }

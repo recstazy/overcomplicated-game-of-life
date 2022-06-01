@@ -38,6 +38,7 @@ namespace GameOfLife.Core
             input.OnPlayOrPause += PlayPause;
 
             view.OnUpdateIntervalChanged += ChangeUpdateInterval;
+            view.OnResponseTimeChanged += ChangeResponseTime;
         }
 
         private void Start()
@@ -72,6 +73,7 @@ namespace GameOfLife.Core
             if (view != null)
             {
                 view.OnUpdateIntervalChanged -= ChangeUpdateInterval;
+                view.OnResponseTimeChanged -= ChangeResponseTime;
             }
         }
 
@@ -119,6 +121,11 @@ namespace GameOfLife.Core
         private void ChangeUpdateInterval(int newValue)
         {
             updateInterval = newValue;
+        }
+
+        private void ChangeResponseTime(float newResponseTime)
+        {
+            implementation.SetPixelResponseTime(newResponseTime);
         }
     }
 }

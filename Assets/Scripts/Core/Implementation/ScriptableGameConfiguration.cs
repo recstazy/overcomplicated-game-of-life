@@ -29,22 +29,10 @@ namespace GameOfLife
         private Color deadColor = Color.black;
 
         [SerializeField]
-        private int minUpdateInterval = 20;
+        private RangedValue<int> updateInterval;
 
         [SerializeField]
-        private int maxUpdateInterval = 500;
-
-        [SerializeField]
-        private int defaultUpdateInterval = 40;
-
-        [SerializeField]
-        private float minPixelResponseTime;
-
-        [SerializeField]
-        private float maxPixelResponseTime;
-
-        [SerializeField]
-        private float defaultPixelResponseTime;
+        private RangedValue<float> pixelResponseTime;
 
         public int GridSize => gridSize;
         public float CellSize => cellSize;
@@ -53,11 +41,7 @@ namespace GameOfLife
         public Color AliveColor => aliveColor;
         public Color DeadColor => deadColor;
         public GameImplementationType Implementation => implementationType;
-        public int MinUpdateInterval => minUpdateInterval;
-        public int MaxUpdateInterval => maxUpdateInterval;
-        public int DefaultUpdateInterval => defaultUpdateInterval;
-        public float DefaultPixelResponseTime => defaultPixelResponseTime;
-        public float MinPixelResponseTime => minPixelResponseTime;
-        public float MaxPixelResponseTime => maxPixelResponseTime;
+        public RangedValue<int> UpdateInterval => updateInterval;
+        public RangedValue<float> PixelResponseTime => pixelResponseTime;
     }
 }

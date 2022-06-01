@@ -51,7 +51,7 @@ namespace GameOfLife.Core
             CalculateGameRect(out var position, out var rotation, out var size);
             implementation.FitToRect(position, rotation, size);
 
-            ChangeUpdateInterval(config.DefaultUpdateInterval);
+            ChangeUpdateInterval(config.UpdateInterval.DefaultValue);
             StartUpdateLoop();
         }
 

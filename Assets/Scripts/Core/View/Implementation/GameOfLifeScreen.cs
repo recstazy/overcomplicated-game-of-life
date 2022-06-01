@@ -39,14 +39,14 @@ namespace GameOfLife.View
 
         private void Awake()
         {
-            var intervalSliderValue = Mathf.InverseLerp(configuration.MinUpdateInterval, configuration.MaxUpdateInterval, configuration.DefaultUpdateInterval);
+            var intervalSliderValue = Mathf.InverseLerp(configuration.UpdateInterval.MinValue, configuration.UpdateInterval.MaxValue, configuration.UpdateInterval.DefaultValue);
             intervalSlider.SetValueWithoutNotify(intervalSliderValue);
-            intervalValueLabel.text = configuration.DefaultUpdateInterval.ToString();
+            intervalValueLabel.text = configuration.UpdateInterval.DefaultValue.ToString();
             intervalSlider.onValueChanged.AddListener(SpeedSliderValueChanged);
 
-            var responseTimeSliderValue = Mathf.InverseLerp(configuration.MinPixelResponseTime, configuration.MaxPixelResponseTime, configuration.DefaultPixelResponseTime);
+            var responseTimeSliderValue = Mathf.InverseLerp(configuration.PixelResponseTime.MinValue, configuration.PixelResponseTime.MaxValue, configuration.PixelResponseTime.DefaultValue);
             responseTimeSlider.SetValueWithoutNotify(responseTimeSliderValue);
-            responseTimeValueLabel.text = (configuration.DefaultPixelResponseTime * 1000f).ToString(RESPONSE_TIME_FORMAT);
+            responseTimeValueLabel.text = (configuration.PixelResponseTime.DefaultValue * 1000f).ToString(RESPONSE_TIME_FORMAT);
             responseTimeSlider.onValueChanged.AddListener(ResponseTimeSliderValueChanged);
         }
 
@@ -57,7 +57,7 @@ namespace GameOfLife.View
 
         private void SpeedSliderValueChanged(float newValue)
         {
-            var intervalValue = Mathf.Lerp(configuration.MinUpdateInterval, configuration.MaxUpdateInterval, newValue);
+            var intervalValue = Mathf.Lerp(configuration.UpdateInterval.MinValue, configuration.UpdateInterval.MaxValue, newValue);
             var roundedValue = Mathf.RoundToInt(intervalValue);
             OnUpdateIntervalChanged?.Invoke(roundedValue);
             intervalValueLabel.text = roundedValue.ToString();
@@ -65,7 +65,7 @@ namespace GameOfLife.View
 
         private void ResponseTimeSliderValueChanged(float newValue)
         {
-            var newResponseTime = Mathf.Lerp(configuration.MinPixelResponseTime, configuration.MaxPixelResponseTime, newValue);
+            var newResponseTime = Mathf.Lerp(configuration.PixelResponseTime.MinValue, configuration.PixelResponseTime.MaxValue, newValue);
             OnResponseTimeChanged?.Invoke(newResponseTime);
             responseTimeValueLabel.text = (newResponseTime * 1000f).ToString(RESPONSE_TIME_FORMAT);
         }

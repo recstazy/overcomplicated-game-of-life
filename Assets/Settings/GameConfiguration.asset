@@ -25,3 +25,11 @@ MonoBehaviour:
   minPixelResponseTime: 0
   maxPixelResponseTime: 0.3
   defaultPixelResponseTime: 0.07
+  updateInterval:
+    defaultValue: 40
+    minValue: 20
+    maxValue: 500
+  pixelResponseTime:
+    defaultValue: 0.07
+    minValue: 0
+    maxValue: 0.3

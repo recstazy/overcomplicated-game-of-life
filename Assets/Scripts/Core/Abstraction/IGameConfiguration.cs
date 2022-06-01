@@ -11,11 +11,7 @@ namespace GameOfLife.Abstraction
         Material CellMaterial { get; }
         Color AliveColor { get; }
         Color DeadColor { get; }
-        int MinUpdateInterval { get; }
-        int MaxUpdateInterval { get; }
-        int DefaultUpdateInterval { get; }
-        float DefaultPixelResponseTime { get; }
-        float MinPixelResponseTime { get; }
-        float MaxPixelResponseTime { get; }
+        RangedValue<int> UpdateInterval { get; }
+        RangedValue<float> PixelResponseTime { get; }
     }
 }
